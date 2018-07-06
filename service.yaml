@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-app
+  labels:
+    run: example-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    name: http
+    protocol: TCP
+    targetPort: 5000 
+ 
+  selector:
+    run: example-app
+
+

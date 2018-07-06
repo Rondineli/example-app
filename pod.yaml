@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-app
+spec:
+  selector:
+    matchLabels:
+      run: example-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: example-app
+        version: "VERSION_REPLACE"
+    spec:
+      hostname: example
+      subdomain: app
+      hostAliases:
+      - ip: "127.0.0.1"
+        hostnames:
+        - "example-app"
+      volumes:
+      - name: foo
+        secret:
+          secretName: mysecret
+
+      containers:
+      - name: example-app
+        image: ECR_ENDPOINT_URL/example-app:VERSION_REPLACE
+        volumeMounts:
+        - name: foo
+          mountPath: "/etc/foo"
+          readOnly: true
+        env:
+        - name: "HOSTNAME"
+          value: "example-app" 
+        - name: "VERSION"
+          value: "VERSION_REPLACE"
+
+        ports:
+        - containerPort: 5000
+          name: default-app
+        securityContext:
+          allowPrivilegeEscalation: true
+        command: ["flask", "run", "-h", "0.0.0.0", "-p", "5000"]
