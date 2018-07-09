@@ -38,7 +38,7 @@ jobs:
       - run:
           name: kubectl deployment here
           command: |
-            echo "in progress..."
+            bash -x deploy_hooks/script.sh
 
   deploy_in_production:
     machine: true
@@ -54,7 +54,7 @@ jobs:
       - run:
           name: kubectl deployment here
           command: |
-            echo "in progress..."
+            bash -x deploy_hooks/script.sh
 
 workflows:
   version: 2
