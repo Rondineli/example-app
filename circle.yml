@@ -38,6 +38,7 @@ jobs:
       - run:
           name: Run build docker
           command: |
+            eval $(aws ecr get-login --no-include-email --region us-west-2)
             docker tag example-app:latest ${ECR_ENDPOINT_STAG}/example-app:${CIRCLE_SHA1}
             docker push ${ECR_ENDPOINT_STAG}/example-app:${CIRCLE_SHA1}
 
@@ -60,6 +61,7 @@ jobs:
       - run:
           name: Run build docker
           command: |
+            eval $(aws ecr get-login --no-include-email --region us-west-2)
             docker tag example-app:latest ${ECR_ENDPOINT_PROD}/example-app:${CIRCLE_TAG}
             docker push ${ECR_ENDPOINT_PROD}/example-app:${CIRCLE_TAG}
 
