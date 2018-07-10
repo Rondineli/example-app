@@ -30,10 +30,16 @@ jobs:
     steps:
       - checkout
       - run:
+          name: run docker
+          command: |
+            docker build -t example-app .
+            docker run -d -p 5000:5000 -t example-app
+
+      - run:
           name: Run build docker
           command: |
-            docker tag ${ECR_ENDPOINT}:latetst ${ECR_ENDPOINT}:${CIRCLE_TAG}
-            docker push ${ECR_ENDPOINT}:${CIRCLE_TAG}
+            docker tag example-app:latest ${ECR_ENDPOINT_STAG}:${CIRCLE_SHA1}
+            docker push ${ECR_ENDPOINT_STAG}:${CIRCLE_SHA1}
 
       - run:
           name: kubectl deployment here
@@ -46,10 +52,16 @@ jobs:
     steps:
       - checkout
       - run:
+          name: run docker
+          command: |
+            docker build -t example-app .
+            docker run -d -p 5000:5000 -t example-app
+
+      - run:
           name: Run build docker
           command: |
-            docker tag example-app:latest ${ECR_ENDPOINT}:latest
-            docker push ${ECR_ENDPOINT}:latest
+            docker tag example-app:latest ${ECR_ENDPOINT_PROD}:${CIRCLE_TAG}
+            docker push ${ECR_ENDPOINT_PROD}:${CIRCLE_TAG}
 
       - run:
           name: kubectl deployment here
