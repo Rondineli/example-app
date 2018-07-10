@@ -27,12 +27,12 @@ sudo apt-get update
 sudo apt-get install -y kubectl
 
 ### Kube Config role
-sed -i "s/K8S_ENDPOINT_REPLACE/${K8S_ENDPOINT}/g" ./${BASEDIR}/kube_config
-sed -i "s/TOKEN_REPLACE/${K8S_TOKEN}/g" ./${BASEDIR}/kube_config
+sed -i "s|K8S_ENDPOINT_REPLACE|${K8S_ENDPOINT}|g" ./${BASEDIR}/kube_config
+sed -i "s|TOKEN_REPLACE|${K8S_TOKEN}|g" ./${BASEDIR}/kube_config
 
 ### Deployment 
-sed -i "s/VERSION_REPLACE/${VERSION_APP}/g" ./${BASEDIR}/deployment.yaml
-sed -i "s/ECR_ENDPOINT_URL/${ECR_ENDPOINT}/g" ./${BASEDIR}/deployment.yaml
+sed -i "s|VERSION_REPLACE|${VERSION_APP}|g" ./${BASEDIR}/deployment.yaml
+sed -i "s|ECR_ENDPOINT_URL|${ECR_ENDPOINT}|g" ./${BASEDIR}/deployment.yaml
 
 export KUBECONFIG=./${BASEDIR}/kube_config
 
