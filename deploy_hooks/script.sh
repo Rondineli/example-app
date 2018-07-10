@@ -6,10 +6,14 @@ BASEDIR=$(dirname "$0")
 
 if [ -z ${CIRCLE_TAG} ]; then
 	VERSION_APP=${CIRCLE_TAG}
-	K8S_ENDPOINT=${K8S_ENDPOINT_STAG}
-	K8S_TOKEN=${K8S_TOKEN_STAG}
+	K8S_ENDPOINT=${K8S_ENDPOINT_PROD}
+	K8S_TOKEN=${K8S_TOKEN_PROD}
+	ECR_ENDPOINT=${ECR_ENDPOINT_PROD}
 else
 	VERSION_APP=${CIRCLE_SHA1}
+	K8S_ENDPOINT=${K8S_ENDPOINT_STAG}
+	K8S_TOKEN=${K8S_TOKEN_STAG}
+	ECR_ENDPOINT=${ECR_ENDPOINT_STAG}
 fi
 
 echo "installing kubectl ..."
@@ -27,7 +31,7 @@ sed -i "s/TOKEN_REPLACE/${K8S_TOKEN}/g" ./${BASEDIR}/kube_config
 
 ### Deployment 
 sed -i "s/VERSION_REPLACE/${VERSION_APP}/g" ./${BASEDIR}/deployment.yaml
-sed -i "s/ECR_ENDPOINT_URL/${K8S_ENDPOINT}/g" ./${BASEDIR}/deployment.yaml
+sed -i "s/ECR_ENDPOINT_URL/${ECR_ENDPOINT}/g" ./${BASEDIR}/deployment.yaml
 
 export KUBECONFIG=./${BASEDIR}/kube_config
 
