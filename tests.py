@@ -16,5 +16,8 @@ class FlaskrTestCase(unittest.TestCase):
     def test_another_thing(self):
         assert 1 == 1
 
+    def test_new_pr(self):
+        assert 2 == 2
+
 if __name__ == '__main__':
     unittest.main()
