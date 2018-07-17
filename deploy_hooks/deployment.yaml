@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: example-app
@@ -11,11 +11,19 @@ spec:
     metadata:
       labels:
         run: example-app
+        app: example-app
         version: "VERSION_REPLACE"
+      annotations:
+        pod.boostport.com/vault-approle: example-app
+        pod.boostport.com/vault-init-container: get-vault-token
+
     spec:
       hostname: example
       subdomain: app
       hostAliases:
+      - ip: "VAULT_ADDR_REPLACE"
+        hostnames:
+        - "vault"
       - ip: "127.0.0.1"
         hostnames:
         - "example-app"
@@ -24,22 +32,51 @@ spec:
         secret:
           secretName: mysecret
 
+
       containers:
       - name: example-app
         image: ECR_ENDPOINT_URL:VERSION_REPLACE
+        imagePullPolicy: Always
         volumeMounts:
-        - name: foo
-          mountPath: "/etc/foo"
-          readOnly: true
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
+        - name: example-app
+          mountPath: /var/run/secrets/example-app
+
         env:
+        - name: VAULT_ROLE_ID
+          value: VAULT_ROLE_ID_REPLACE
+
         - name: "HOSTNAME"
-          value: "example-app" 
+          value: "example-app"
         - name: "VERSION"
           value: "VERSION_REPLACE"
 
         ports:
-        - containerPort: 5000
+        - containerPort: 5001
           name: default-app
         securityContext:
           allowPrivilegeEscalation: true
-        command: ["flask", "run", "-h", "0.0.0.0", "-p", "5000"]
+        command: ["/bin/sh", "-c"]
+        args: ["/app/start.sh example-app ENVIRONMENT && source /var/run/secrets/example-app/env_vars && flask run -h 0.0.0.0 -p 5001"]
+
+      initContainers:
+      - name: get-vault-token
+        image: boostport/kubernetes-vault-init
+        imagePullPolicy: Always
+
+        env:
+        - name: VAULT_ROLE_ID
+          value: VAULT_ROLE_ID_REPLACE
+
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
+        - name: example-app
+          mountPath: /var/run/secrets/example-app
+
+      volumes:
+      - name: vault-token
+        emptyDir: {}
+      - name: example-app
+        emptyDir: {}

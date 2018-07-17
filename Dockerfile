@@ -10,10 +10,14 @@ RUN apk add --no-cache python3 && \
     if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
     rm -r /root/.cache
 
+RUN apk add --no-cache curl git vim
+
 RUN pip3 install flask
 
 ENV FLASK_APP=/app/app.py
 
-EXPOSE 5000
+EXPOSE 5001
 
-CMD ["flask", "run", "-h", "0.0.0.0", "-p", "5000"]
+RUN chmod +x /app/start.sh
+
+CMD ["flask", "run", "-h", "0.0.0.0", "-p", "5001"]
