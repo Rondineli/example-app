@@ -9,12 +9,17 @@ if [ -z ${CIRCLE_TAG} ]; then
         K8S_ENDPOINT=${K8S_ENDPOINT_STAG}
         K8S_TOKEN=${K8S_TOKEN_STAG}
         ECR_ENDPOINT=${ECR_ENDPOINT_STAG}
-
+        VAULT_ADDR="${VAULT_ADDR_STAG}"
+	VAULT_ROLE_ID="${VAULT_ROLE_ID_STAG}"
+        ENVIRONMENT="stag"
 else
         VERSION_APP=${CIRCLE_TAG}
         K8S_ENDPOINT=${K8S_ENDPOINT_PROD}
         K8S_TOKEN=${K8S_TOKEN_PROD}
         ECR_ENDPOINT=${ECR_ENDPOINT_PROD}
+        VAULT_ADDR="${VAULT_ADDR_PROD}"
+	VAULT_ROLE_ID="${VAULT_ROLE_ID_PROD}"
+        ENVIRONMENT="prod"
 fi
 
 echo "installing kubectl ..."
@@ -33,6 +38,10 @@ sed -i "s|TOKEN_REPLACE|${K8S_TOKEN}|g" ./${BASEDIR}/kube_config
 ### Deployment 
 sed -i "s|VERSION_REPLACE|${VERSION_APP}|g" ./${BASEDIR}/deployment.yaml
 sed -i "s|ECR_ENDPOINT_URL|${ECR_ENDPOINT}|g" ./${BASEDIR}/deployment.yaml
+
+### Vault
+sed -f "s|VAULT_ADDR_REPLACE|${VAULT_ADDR}|g" ./${BASEDIR}/deployment.yaml
+sed -i "s|VAULT_ROLE_ID_REPLACE|${VAULT_ROLE_ID}|g" ./${BASEDIR}/deployment.yaml
 
 export KUBECONFIG=./${BASEDIR}/kube_config
 
