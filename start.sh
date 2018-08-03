@@ -32,7 +32,7 @@ TOKEN_APP=$(cat /var/run/secrets/boostport.com/vault-token |jq ".clientToken|tos
 
 echo "Got Token....${TOKEN_APP}"
 
-echo "Requesting filter...${KEY_FILTER}
+echo "Requesting filter...${KEY_FILTER}"
 
 if [ "$KEY_FILTER" == "all" ]; then
 	KEYS=$(curl --header "X-Vault-Token: $TOKEN_APP" --header "Content-Type: application/json" -X LIST http://vault:8200/v1/$APP_BACKEND_SECRET/ |jq -c '.data.keys[]|tostring ')
