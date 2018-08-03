@@ -30,6 +30,9 @@ touch $FILE_CONFIG
 
 TOKEN_APP=$(cat /var/run/secrets/boostport.com/vault-token |jq ".clientToken|tostring"|tr "\"" " ")
 
+echo "Got Token....${TOKEN_APP}"
+
+echo "Requesting filter...${KEY_FILTER}
 
 if [ "$KEY_FILTER" == "all" ]; then
 	KEYS=$(curl --header "X-Vault-Token: $TOKEN_APP" --header "Content-Type: application/json" -X LIST http://vault:8200/v1/$APP_BACKEND_SECRET/ |jq -c '.data.keys[]|tostring ')
@@ -39,6 +42,7 @@ fi
 
 for key in $KEYS; do
 	key=$(echo "$key" |cut -d "\"" -f 2)
+	echo "Requesting key ... $APP_BACKEND_SECRET/$key"
 	env_var=$(curl --header "X-Vault-Token: $TOKEN_APP" --header "Content-Type: application/json" -X GET http://vault:8200/v1/$APP_BACKEND_SECRET/$key |jq -r '.data|to_entries[]|"export \(.key|ascii_upcase)=\"\(.value)\""')
 	do_set_to_env_file "$env_var"
 done
