@@ -1,7 +1,6 @@
-import os
-import app  as flaskr
+import app as flaskr
 import unittest
-import tempfile
+
 
 class FlaskrTestCase(unittest.TestCase):
 
@@ -18,6 +17,10 @@ class FlaskrTestCase(unittest.TestCase):
 
     def test_new_pr(self):
         assert 2 == 2
+
+    def test_demo_pr(self):
+        assert 2 == 2
+
 
 if __name__ == '__main__':
     unittest.main()
