@@ -10,7 +10,7 @@ spec:
   - port: 8080
     name: http
     protocol: TCP
-    targetPort: 5000 
+    targetPort: 5001 
  
   selector:
     run: example-app
