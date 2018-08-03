@@ -40,7 +40,7 @@ sed -i "s|VERSION_REPLACE|${VERSION_APP}|g" ./${BASEDIR}/deployment.yaml
 sed -i "s|ECR_ENDPOINT_URL|${ECR_ENDPOINT}|g" ./${BASEDIR}/deployment.yaml
 
 ### Vault
-sed -f "s|VAULT_ADDR_REPLACE|${VAULT_ADDR}|g" ./${BASEDIR}/deployment.yaml
+sed -i "s|VAULT_ADDR_REPLACE|${VAULT_ADDR}|g" ./${BASEDIR}/deployment.yaml
 sed -i "s|VAULT_ROLE_ID_REPLACE|${VAULT_ROLE_ID}|g" ./${BASEDIR}/deployment.yaml
 
 export KUBECONFIG=./${BASEDIR}/kube_config
