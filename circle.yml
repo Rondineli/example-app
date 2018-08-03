@@ -61,7 +61,7 @@ jobs:
       - run:
           name: Run build docker
           command: |
-            eval $(aws ecr get-login --no-include-email --region us-east-1)
+            eval $(aws ecr get-login --no-include-email --region ${AWS_REGION})
             docker tag example-app:latest ${ECR_ENDPOINT_PROD}:${CIRCLE_TAG}
             docker push ${ECR_ENDPOINT_PROD}:${CIRCLE_TAG}
 
