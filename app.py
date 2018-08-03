@@ -14,7 +14,7 @@ def hello_world():
         )
     )
 
-    base_str="SECRET_"
+    base_str = "SECRET_"
     secrets = []
 
     for env in os.environ.keys():
