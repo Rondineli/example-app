@@ -18,7 +18,7 @@ def hello_world():
     secrets = []
 
     for env in os.environ.keys():
-        if base_str == env:7]:
+        if base_str == env[:7]:
             secrets.append({env: os.environ.get(env)})
 
     message = """
