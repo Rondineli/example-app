@@ -14,13 +14,16 @@ def hello_world():
         )
     )
 
-    SECRET_1 = os.environ.get("SECRET_1", "secret_1 not found on vault")
-    SECRET_2 = os.environ.get("SECRET_2", "secret_1 not found on vault")
+    base_str = "SECRET_"
+    secrets = []
+
+    for env in os.environ.keys():
+        if base_str == env[:7]:
+            secrets.append({env: os.environ.get(env)})
 
     message = """
         Message: {}
         Getting values from vault:
-        SECRET_1: {}
-        SECRET_2: {}
-    """.format(message, SECRET_1, SECRET_2)
+        Secrets: {}
+    """.format(message, [x for x in secrets])
     return message
