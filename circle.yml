@@ -11,7 +11,7 @@ jobs:
           command: |
             docker build -t example-app .
             docker run -d -p 5000:5000 -t example-app 
-            echo "Testing integration - trello"
+            echo "Testing integration - trello int"
       - run:
           name: Run flake8
           command: |
